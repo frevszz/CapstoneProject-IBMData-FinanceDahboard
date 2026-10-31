@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Finance Dashboard</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+    <!-- Custom Tailwind Config -->
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#3b82f6",
+              success: "#22c55e",
+              danger: "#ef4444",
+              warning: "#f59e0b",
+              surface: "#f8fafc",
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body class="bg-slate-100 text-slate-800 font-sans min-h-screen">
+
+    <!-- ===================== HEADER ===================== -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <!-- Logo icon -->
+          <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <h1 class="text-xl font-bold text-slate-800">Finance Dashboard</h1>
+        </div>
+        <!-- Current date display -->
+        <span id="currentDate" class="text-sm text-slate-500 hidden sm:block"></span>
+      </div>
+    </header>
+
+    <!-- ===================== MAIN CONTENT ===================== -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+      <!-- ===== KPI CARDS ===== -->
+      <section aria-label="KPI Overview">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+
+          <!-- Total Income -->
+          <div class="kpi-card bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Pemasukkan</span>
+              <div class="w-9 h-9 rounded-xl bg-green-100 flex items-center justify-center">
+                <svg class="w-5 h-5 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 11l5-5m0 0l5 5m-5-5v12"/>
+                </svg>
+              </div>
+            </div>
+            <p id="kpiIncome" class="text-2xl font-bold text-slate-800">Rp 0</p>
+            <p class="text-xs text-slate-400 mt-1">Semua waktu</p>
+          </div>
+
+          <!-- Total Expense -->
+          <div class="kpi-card bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Pengeluaran</span>
+              <div class="w-9 h-9 rounded-xl bg-red-100 flex items-center justify-center">
+                <svg class="w-5 h-5 text-danger" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 13l-5 5m0 0l-5-5m5 5V6"/>
+                </svg>
+              </div>
+            </div>
+            <p id="kpiExpense" class="text-2xl font-bold text-slate-800">Rp 0</p>
+            <p class="text-xs text-slate-400 mt-1">Semua waktu</p>
+          </div>
+
+          <!-- Current Balance -->
+          <div class="kpi-card bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Saldo Saat Ini</span>
+              <div class="w-9 h-9 rounded-xl bg-blue-100 flex items-center justify-center">
+                <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                </svg>
+              </div>
+            </div>
+            <p id="kpiBalance" class="text-2xl font-bold text-slate-800">Rp 0</p>
+            <p class="text-xs text-slate-400 mt-1">Pemasukkan - Pengeluaran</p>
+          </div>
+
+          <!-- Total Transactions -->
+          <div class="kpi-card bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Total Transaksi</span>
+              <div class="w-9 h-9 rounded-xl bg-purple-100 flex items-center justify-center">
+                <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                </svg>
+              </div>
+            </div>
+            <p id="kpiTransactions" class="text-2xl font-bold text-slate-800">0</p>
+            <p class="text-xs text-slate-400 mt-1">Total transaksi tercatat</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===== INPUT FORMS ===== -->
+      <section aria-label="Input Transaksi">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <!-- Income Form -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+            <h2 class="text-base font-semibold text-slate-700 mb-4 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-success inline-block"></span>
+              Tambah Pemasukkan
+            </h2>
+            <form id="incomeForm" class="space-y-4" novalidate>
+              <div>
+                <label for="incomeAmount" class="block text-sm font-medium text-slate-600 mb-1">Jumlah (Rp)</label>
+                <input type="number" id="incomeAmount" placeholder="Contoh: 5000000" min="1"
+                  class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" />
+              </div>
+              <div>
+                <label for="incomeSource" class="block text-sm font-medium text-slate-600 mb-1">Sumber</label>
+                <select id="incomeSource"
+                  class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition bg-white">
+                  <option value="bank_transfer">Bank Transfer</option>
+                  <option value="cash">Cash</option>
+                  <option value="e-wallet">E-Wallet</option>
+                  <option value="lainnya">Lainnya</option>
+                </select>
+              </div>
+              <div>
+                <label for="incomeDescription" class="block text-sm font-medium text-slate-600 mb-1">Keterangan</label>
+                <input type="text" id="incomeDescription" placeholder="Contoh: Gaji bulan Oktober"
+                  class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" />
+              </div>
+              <button type="submit"
+                class="w-full bg-success text-white rounded-xl py-2.5 text-sm font-semibold hover:bg-green-600 active:scale-95 transition-all duration-150">
+                + Tambah Pemasukkan
+              </button>
+            </form>
+          </div>
+
+          <!-- Expense Form -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+            <h2 class="text-base font-semibold text-slate-700 mb-4 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-danger inline-block"></span>
+              Tambah Pengeluaran
+            </h2>
+            <form id="expenseForm" class="space-y-4" novalidate>
+              <div>
+                <label for="expenseAmount" class="block text-sm font-medium text-slate-600 mb-1">Jumlah (Rp)</label>
+                <input type="number" id="expenseAmount" placeholder="Contoh: 150000" min="1"
+                  class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" />
+              </div>
+              <div>
+                <label for="expenseCategory" class="block text-sm font-medium text-slate-600 mb-1">Kategori</label>
+                <select id="expenseCategory"
+                  class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition bg-white">
+                  <option value="Makanan & Minuman">Makanan & Minuman</option>
+                  <option value="Transportasi">Transportasi</option>
+                  <option value="Kesehatan">Kesehatan</option>
+                  <option value="Pendidikan">Pendidikan</option>
+                  <option value="Hiburan">Hiburan</option>
+                  <option value="Belanja">Belanja</option>
+                  <option value="Tagihan & Utilitas">Tagihan & Utilitas</option>
+                  <option value="Lainnya">Lainnya</option>
+                </select>
+              </div>
+              <div>
+                <label for="expenseDescription" class="block text-sm font-medium text-slate-600 mb-1">Keterangan</label>
+                <input type="text" id="expenseDescription" placeholder="Contoh: Makan siang bersama"
+                  class="w-full rounded-xl border border-slate-200 px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition" />
+              </div>
+              <button type="submit"
+                class="w-full bg-danger text-white rounded-xl py-2.5 text-sm font-semibold hover:bg-red-600 active:scale-95 transition-all duration-150">
+                − Tambah Pengeluaran
+              </button>
+            </form>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===== CHARTS ===== -->
+      <section aria-label="Visualisasi Data">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+          <!-- Monthly Income vs Expense -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+            <h2 class="text-base font-semibold text-slate-700 mb-4">Pemasukkan vs Pengeluaran Bulanan</h2>
+            <div class="chart-container">
+              <canvas id="monthlyChart"></canvas>
+            </div>
+            <p id="monthlyEmpty" class="empty-chart-msg text-center text-sm text-slate-400 py-8 hidden">Belum ada data transaksi</p>
+          </div>
+
+          <!-- Expense by Category (Doughnut) -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+            <h2 class="text-base font-semibold text-slate-700 mb-4">Pengeluaran per Kategori</h2>
+            <div class="chart-container">
+              <canvas id="categoryChart"></canvas>
+            </div>
+            <p id="categoryEmpty" class="empty-chart-msg text-center text-sm text-slate-400 py-8 hidden">Belum ada data pengeluaran</p>
+          </div>
+
+          <!-- Biggest Expenses (Horizontal Bar) -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+            <h2 class="text-base font-semibold text-slate-700 mb-4">Pengeluaran Terbesar</h2>
+            <div class="chart-container">
+              <canvas id="biggestExpenseChart"></canvas>
+            </div>
+            <p id="biggestEmpty" class="empty-chart-msg text-center text-sm text-slate-400 py-8 hidden">Belum ada data pengeluaran</p>
+          </div>
+
+          <!-- Payment Method Usage (Pie) -->
+          <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+            <h2 class="text-base font-semibold text-slate-700 mb-4">Metode Pembayaran (Pemasukkan)</h2>
+            <div class="chart-container">
+              <canvas id="paymentMethodChart"></canvas>
+            </div>
+            <p id="paymentEmpty" class="empty-chart-msg text-center text-sm text-slate-400 py-8 hidden">Belum ada data pemasukkan</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ===== TRANSACTION LIST ===== -->
+      <section aria-label="Daftar Transaksi">
+        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+
+          <!-- Header + Filter -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+            <h2 class="text-base font-semibold text-slate-700">Daftar Transaksi</h2>
+            <div class="flex flex-wrap gap-2">
+              <!-- Filter by type -->
+              <select id="filterType"
+                class="rounded-xl border border-slate-200 px-3 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white cursor-pointer transition">
+                <option value="all">Semua Tipe</option>
+                <option value="income">Pemasukkan</option>
+                <option value="expense">Pengeluaran</option>
+              </select>
+              <!-- Filter by category -->
+              <select id="filterCategory"
+                class="rounded-xl border border-slate-200 px-3 py-2 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-primary/50 bg-white cursor-pointer transition">
+                <option value="all">Semua Kategori</option>
+              </select>
+              <!-- Clear all button -->
+              <button id="clearAll"
+                class="rounded-xl border border-red-200 text-danger px-3 py-2 text-xs font-medium hover:bg-red-50 transition">
+                Hapus Semua
+              </button>
+            </div>
+          </div>
+
+          <!-- Transaction list -->
+          <div id="transactionList" class="space-y-2">
+            <!-- Transactions rendered by JS -->
+          </div>
+
+          <!-- Empty state -->
+          <div id="emptyState" class="text-center py-12 hidden">
+            <svg class="w-12 h-12 text-slate-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+            </svg>
+            <p class="text-sm text-slate-400">Belum ada transaksi yang ditambahkan</p>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ===================== TOAST NOTIFICATION ===================== -->
+    <div id="toast" class="toast fixed bottom-6 right-6 z-50 hidden">
+      <div id="toastContent" class="flex items-center gap-3 bg-slate-800 text-white px-5 py-3 rounded-2xl shadow-lg text-sm font-medium">
+        <span id="toastIcon"></span>
+        <span id="toastMessage"></span>
+      </div>
+    </div>
+
+    <!-- Script -->
+    <script src="script.js"></script>
+  </body>
+</html>
